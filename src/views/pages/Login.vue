@@ -1,6 +1,6 @@
 
 <script>
-import login from '../../api/login';
+import login from '@/api/login';
 
 export default {
   name: 'Login',
@@ -13,6 +13,7 @@ export default {
         },
       rememberMe: false,
       showPassword: false,
+      loading: false,
     }
   },
 
@@ -23,12 +24,19 @@ export default {
   },
 
   methods: {
-    login() {
+    async login() {
+      const { valid } = await this.$refs.validateLogin.validate()
+      if (!valid) return
      try {
-        const res = login.login(this.data)
+        this.loading = true
+        const res = await login.login(this.data)
         console.log(res)
+
      } catch (error) {
-        console.error('Login failed:', error)
+        console.error(error)
+        this.$toast.error(this.$errorApi(error))
+     } finally {
+        this.loading = false
      }
     },
   },
@@ -73,12 +81,14 @@ export default {
               </div>
             </div>
 
-            <v-form @submit.prevent="login">
+            <v-form @submit.prevent="login" ref="validateLogin">
                 <v-row>
                     <v-col cols="12">
                         <v-text-field
-                        v-model="email"
+                        v-model="data.email"
                         label="E-mail"
+                        :rules="[$validate.required, $validate.email]"
+                        hide-details="auto"
                         prepend-inner-icon="mdi-email-outline"
                         variant="outlined"
                         density="comfortable"
@@ -87,12 +97,14 @@ export default {
                     </v-col>
                     <v-col cols="12">
                         <v-text-field
-                            v-model="password"
+                            v-model="data.password"
                             label="Senha"
                             prepend-inner-icon="mdi-lock-outline"
                             :append-inner-icon="
                             showPassword ? 'mdi-eye-off' : 'mdi-eye'
                             "
+                            :rules="[$validate.required]"
+                            hide-details="auto"
                             :type="showPassword ? 'text' : 'password'"
                             variant="outlined"
                             density="comfortable"
@@ -105,9 +117,9 @@ export default {
                         block
                         size="large"
                         type="submit"
-                    >
-                        Entrar
-                    </v-btn>
+                        text="Entrar"
+                        :loading
+                    />
               </v-row>
             </v-form>
           </v-card-text>
