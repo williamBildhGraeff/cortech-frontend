@@ -6,11 +6,17 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/pages/Login.vue'
+import ListProducers from '../views/pages/ListProducers.vue'
 const routes = [
   {
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+   {
+    path: '/produtores',
+    name: 'Produtores',
+    component: ListProducers,
   },
   {
     path: '/:pathMatch(.*)*',

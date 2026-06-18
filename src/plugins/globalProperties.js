@@ -3,9 +3,12 @@ import Toast from '@/components/toasts/Toasts.vue'
 import vuetify from './vuetify'
 import apiError from '../utils/validate'
 import validate from '../utils/validate'
+import { createPinia } from 'pinia'
 
 export default {
   install (app) {
+    const pinia = createPinia()
+    app.use(pinia)
     // Cria uma instância isolada do componente Toast
     const toastApp = createApp(Toast)
     toastApp.use(vuetify)

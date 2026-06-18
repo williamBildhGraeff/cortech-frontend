@@ -1,6 +1,7 @@
 
 <script>
 import login from '@/api/login';
+import { useUserStore } from '@/stores/user.store';
 
 export default {
   name: 'Login',
@@ -8,12 +9,14 @@ export default {
   data() {
     return {
         data: {
-            email: '',   
-            password: '',
+            email: 'williambildhauer@gmail.com',   
+            password: '1015GB2202Wm@',
         },
       rememberMe: false,
       showPassword: false,
       loading: false,
+      dialogCompanies: false,
+      companies: []
     }
   },
 
@@ -30,8 +33,9 @@ export default {
      try {
         this.loading = true
         const res = await login.login(this.data)
-        console.log(res)
-
+        this.dialogCompanies = true
+        this.companies = res.empresas
+        useUserStore().defineUser(res)
      } catch (error) {
         console.error(error)
         this.$toast.error(this.$errorApi(error))
@@ -135,4 +139,5 @@ export default {
       </v-col>
     </v-row>
   </v-container>
+  <dialog-choice-company v-model="dialogCompanies" :companies/>
 </template>
