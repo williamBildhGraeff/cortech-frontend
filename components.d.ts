@@ -11,7 +11,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    DialogChoiceCompany: typeof import('./src/components/dialogs/DialogChoiceCompany.vue')['default']
+    DialogChoiceCompany: typeof import('./src/components/dialogs/companies/DialogChoiceCompany.vue')['default']
+    DialogDelete: typeof import('./src/components/dialogs/DialogDelete.vue')['default']
+    DialogRegisterFarm: typeof import('./src/components/dialogs/farms/DialogRegisterFarm.vue')['default']
+    DialogRegisterProducer: typeof import('./src/components/dialogs/producers/DialogRegisterProducer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Toasts: typeof import('./src/components/toasts/Toasts.vue')['default']

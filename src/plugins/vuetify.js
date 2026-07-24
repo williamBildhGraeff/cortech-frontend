@@ -44,7 +44,6 @@ export default createVuetify({
         success: '#22C55E',
         warning: '#F59E0B',
         error: '#EF4444',
-        background: '#111827',
         surface: '#1F2937',
         'surface-variant': '#374151',
         'on-primary': '#FFFFFF',

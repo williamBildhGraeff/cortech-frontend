@@ -11,7 +11,7 @@ export const useUserStore = defineStore('user', {
         },
 
         getEmpresaId(state){
-            return state.getEmpresaId
+            return state.empresa_id
         }
     },
 

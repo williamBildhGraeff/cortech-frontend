@@ -1,62 +1,59 @@
 <script>
+import producers from '../../api/producers';
+
 export default {
   data: () => ({
     search: '',
-
-    produtores: [
-      {
-        id: 1,
-        nome: 'João da Silva',
-        propriedade: 'Fazenda Santa Helena',
-        municipio: 'Encantado/RS',
-        rebanho: 320,
-      },
-      {
-        id: 2,
-        nome: 'Carlos Oliveira',
-        propriedade: 'Estância Boa Vista',
-        municipio: 'Roca Sales/RS',
-        rebanho: 185,
-      },
-      {
-        id: 3,
-        nome: 'Pedro Martins',
-        propriedade: 'Fazenda São José',
-        municipio: 'Muçum/RS',
-        rebanho: 540,
-      },
-      {
-        id: 4,
-        nome: 'Ricardo Ferreira',
-        propriedade: 'Fazenda Horizonte',
-        municipio: 'Lajeado/RS',
-        rebanho: 260,
-      },
-      {
-        id: 5,
-        nome: 'André Lopes',
-        propriedade: 'Sítio Bela Vista',
-        municipio: 'Arroio do Meio/RS',
-        rebanho: 90,
-      },
-    ],
+    dialogRegisterProducer: false,
+    dialogDelete: false,
+    producers: [],
+    selectedProducer: {},
+    producerToDelete: null
   }),
 
-  computed: {
-    produtoresFiltrados () {
-      const termo = this.search.toLowerCase()
-
-      return this.produtores.filter(produtor =>
-        produtor.nome.toLowerCase().includes(termo) ||
-        produtor.propriedade.toLowerCase().includes(termo) ||
-        produtor.municipio.toLowerCase().includes(termo)
-      )
-    },
+  mounted(){
+    this.getProducers()
   },
+
+  methods: {
+    async getProducers(){
+      try {
+        const res = await producers.getProducers()
+        this.producers = res
+      } catch (error) {
+        console.error(error)
+        this.$toast.error(this.$errorApi(error))
+      }
+    },
+
+    openDeleteDialog(producer){
+      this.producerToDelete = producer
+      this.dialogDelete = true
+    },
+
+    async deleteProducer(){
+      if (!this.producerToDelete?.id) return
+
+      try {
+        await producers.deleteProducer(this.producerToDelete.id)
+        this.$toast.success('Produtor excluído com sucesso!')
+        this.dialogDelete = false
+        this.producerToDelete = null
+        await this.getProducers()
+      } catch (error) {
+        console.error(error)
+        this.$toast.error(this.$errorApi(error))
+      }
+    },
+
+    selectProducer(producer){
+      this.$router.push({ name: 'Fazendas', params: { id: producer.id } })
+    }
+  }
 }
 </script>
 <template>
-  <v-container class="py-8">
+  <v-container fluid>
     <div class="text-h4 font-weight-bold mb-2">
       Qual produtor deseja atender?
     </div>
@@ -65,19 +62,23 @@ export default {
       Selecione um produtor para acessar suas informações.
     </div>
 
-    <v-text-field
-      v-model="search"
-      prepend-inner-icon="mdi-magnify"
-      label="Buscar produtor"
-      variant="outlined"
-      hide-details
-      class="mb-6"
-    />
-
+    <v-row>
+      <v-col>
+        <v-text-field
+          v-model="search"
+          prepend-inner-icon="mdi-magnify"
+          label="Buscar produtor"
+          variant="outlined"
+          density="compact"
+          hide-details
+          />
+        
+        </v-col>
+      </v-row>
     <v-row>
       <v-col
-        v-for="produtor in produtoresFiltrados"
-        :key="produtor.id"
+        v-for="producer in producers"
+        :key="producer.id"
         cols="12"
         md="6"
         lg="4"
@@ -85,46 +86,111 @@ export default {
        <v-card
         hover
         rounded="xl"
-        @click="selecionarProdutor(produtor)"
+        height=""
+        @click="selectProducer(producer)"
         >
         <v-card-text>
-            <div class="d-flex align-center">
-            <v-avatar
+          <v-row class="d-flex align-center">
+            <v-col cols="4" md="2">
+
+              <v-avatar
                 color="primary"
                 size="56"
-            >
+                >
                 <v-icon>
-                mdi-cow
+                  mdi-cow
                 </v-icon>
-            </v-avatar>
+              </v-avatar>
+            </v-col>
 
-            <div class="ml-4">
+            <v-col cols="8" md="10">
                 <div class="text-h6">
-                {{ produtor.nome }}
+                {{ producer.nome }}
                 </div>
 
                 <div class="text-body-2 text-medium-emphasis">
-                {{ produtor.propriedade }}
+                  <v-icon>mdi-cellphone</v-icon>
+                {{ producer.telefone }} 
                 </div>
-            </div>
-            </div>
+                <div class="text-body-2 text-medium-emphasis">
+                  <v-icon>mdi-card-account-details</v-icon>
+                  {{ producer.cpf_cnpj }} 
+                </div>
+              </v-col>
+          </v-row>
 
             <v-divider class="my-4" />
 
             <div class="d-flex justify-space-between mb-2">
-            <span>Município</span>
-            <strong>{{ produtor.municipio }}</strong>
+            <span>Lotes</span>
+             <v-chip color="primary">
+                {{ producer.quantidade_lotes }} 
+                {{ producer.quantidade_lotes == 1 ? 'lote' : 'lotes' }}
+            </v-chip>
             </div>
 
             <div class="d-flex justify-space-between">
-            <span>Rebanho</span>
+            <span>Animais</span>
             <v-chip color="primary">
-                {{ produtor.rebanho }} cabeças
+                {{ producer.quantidade_animais }} 
+                {{ producer.quantidade_animais == 1 ? 'cabeça' : 'cabeças' }}
             </v-chip>
             </div>
         </v-card-text>
+        <v-divider />
+        <v-card-actions>
+          <v-btn
+            color="red"
+            text="Deletar"
+            variant="tonal"
+            size="small"
+            prepend-icon="mdi-trash-can"
+            @click.stop="openDeleteDialog(producer)"
+          />
+          <v-spacer/>
+          <v-btn
+            color="primary"
+            text="Editar"
+            variant="tonal"
+            size="small"
+            prepend-icon="mdi-pencil"
+            @click.stop="selectedProducer = producer; dialogRegisterProducer = true"
+          />
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col       
+        cols="12"
+        md="6"
+        lg="4"
+      >
+        <v-card 
+        hover
+        height="252"
+        rounded="xl" 
+        class="d-flex justify-center">
+          <v-btn
+            
+            rounded
+            class="w-100 h-100"
+            icon="mdi-plus"
+            @click="selectedProducer = {}; dialogRegisterProducer = true"/>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
+  <dialog-register-producer
+    v-model="dialogRegisterProducer"
+    :producer="selectedProducer"
+    @list="getProducers"
+    />
+
+  <dialog-delete
+    v-model="dialogDelete"
+    title="Confirmar exclusão"
+    :message="producerToDelete ? `Deseja realmente excluir o produtor ${producerToDelete.nome}? Será excluído tudo relacionado a esse produtor.` : 'Deseja realmente excluir este item?'"
+    confirm-text="Excluir"
+    cancel-text="Cancelar"
+    @confirm="deleteProducer"
+  />
 </template>

@@ -1,7 +1,7 @@
 
 <script>
 import { mapActions } from 'pinia';
-import { useUserStore } from '../../stores/user.store';
+import { useUserStore } from '../../../stores/user.store';
 
 export default {
     props: {
@@ -36,7 +36,8 @@ export default {
     methods: {
         ...mapActions(useUserStore, ['setEmpresaId']),
         confirmar () {
-          this.setEmpresaId(this.selectedCompanies)
+          this.setEmpresaId(this.selectedCompanies.id)
+          localStorage.setItem('empresa', JSON.stringify(this.selectedCompanies))
           this.$router.push('/produtores')
           this.dialog = false
         },
