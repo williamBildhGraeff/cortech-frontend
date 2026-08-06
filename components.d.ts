@@ -13,10 +13,13 @@ declare module 'vue' {
   export interface GlobalComponents {
     DialogChoiceCompany: typeof import('./src/components/dialogs/companies/DialogChoiceCompany.vue')['default']
     DialogDelete: typeof import('./src/components/dialogs/DialogDelete.vue')['default']
+    DialogLots: typeof import('./src/components/dialogs/lots/DialogLots.vue')['default']
     DialogRegisterFarm: typeof import('./src/components/dialogs/farms/DialogRegisterFarm.vue')['default']
     DialogRegisterProducer: typeof import('./src/components/dialogs/producers/DialogRegisterProducer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SelectStatusLots: typeof import('./src/components/selects/SelectStatusLots.vue')['default']
     Toasts: typeof import('./src/components/toasts/Toasts.vue')['default']
+    VSw: typeof import('vuetify/lib')['VSw']
   }
 }

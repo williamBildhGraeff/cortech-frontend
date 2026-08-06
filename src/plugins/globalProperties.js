@@ -6,6 +6,7 @@ import validate from '../utils/validate'
 import { createPinia } from 'pinia'
 import masks from '@/utils/masks'
 import { vMaska } from "maska/vue";
+import formatTimestamp from '../utils/formatTimestamp'
 
 export default {
   install (app) {
@@ -22,6 +23,7 @@ export default {
 
     // Define funções globais
     app.config.globalProperties.$masks = masks
+      app.config.globalProperties.$formatTimestamp = formatTimestamp
     app.config.globalProperties.$toast = {
       success (msg = 'Sucesso') {
         instance.show(msg, 'success')

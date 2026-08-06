@@ -47,7 +47,14 @@ export default {
     },
 
     selectFarm(farm){
-      this.$router.push({ name: 'farm-details', params: { id: farm.id } })
+      console.log(farm)
+      this.$router.push({
+        name: 'Lotes',
+        params: { 
+          producer_id: this.$route.params.id,
+          farm_id: farm.id
+        },
+      })
     },
 
     formatDate(value){

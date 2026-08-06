@@ -13,11 +13,46 @@ import 'vuetify/styles'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
- theme: {
-  defaultTheme: 'dark',
-  themes: {
-    light: {
-      dark: false,
+  defaults: {
+    VTextField: {
+      variant: 'outlined',
+      hideDetails: 'auto',
+      density: 'compact'
+    },
+    VDateInput: {
+      variant: 'outlined',
+      hideDetails: 'auto',
+      density: 'compact',
+      prependIcon: '',
+    },
+    VNumberInput: {
+      variant: 'outlined',
+      hideDetails: 'auto',
+      density: 'compact'
+    },
+    VSelect: {
+      variant: 'outlined',
+      hideDetails: 'auto',
+      density: 'compact'
+    },
+    VSwitch: {
+      variant: 'outlined',
+      hideDetails: 'auto',
+      density: 'compact'
+    },
+    VCol:{
+      class: 'pa-1'
+    },
+    VRow: {
+      noGutters: true
+    }
+
+  },
+  theme: {
+    defaultTheme: 'light',
+    themes: {
+      light: {
+        dark: false,
       colors: {
         primary: '#2563EB',
         secondary: '#60A5FA',
@@ -54,4 +89,5 @@ export default createVuetify({
     },
   },
 },
+
 })
