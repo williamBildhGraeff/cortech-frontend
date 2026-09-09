@@ -9,6 +9,9 @@ import Login from '@/views/pages/Login.vue'
 import ListProducers from '../views/pages/ListProducers.vue'
 import ListFarms from '../views/pages/ListFarms.vue'
 import ListLots from '../views/pages/ListLots.vue'
+import ListAnimals from '../views/pages/ListAnimals.vue'
+import Core from '../components/core/Core.vue'
+import ListWeighing from '../views/pages/ListWeighing.vue'
 const routes = [
   {
     path: '/login',
@@ -21,14 +24,32 @@ const routes = [
     component: ListProducers,
   },
   {
-    path: '/fazendas/:id',
+    path: '/fazendas',
     name: 'Fazendas',
     component: ListFarms,
   },
   {
-    path: '/:producer_id/fazendas/:farm_id/lotes',
+    path: '/lotes',
     name: 'Lotes',
     component: ListLots,
+  },
+   {
+    path: '/',
+    name: 'Rebanho',
+    redirect: '/animais',
+    component: Core,
+    children: [
+      {
+        path: 'animais',
+        name: 'Animais do Lote',
+        component: ListAnimals,
+      },
+      {
+        path: 'pesagens',
+        name: 'Pesagens do Lote',
+        component: ListWeighing,
+      }
+    ]
   },
   {
     path: '/:pathMatch(.*)*',

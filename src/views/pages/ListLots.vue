@@ -23,7 +23,7 @@ export default {
   },
 
   mounted() {
-    this.farm_id = this.$route.params.farm_id
+    this.farm_id = localStorage.getItem('farm')
     this.getLots()
   },
 
@@ -39,13 +39,6 @@ export default {
         } finally {
             this.loading = false
         }
-    },
-
-    goBack() {
-      this.$router.push({
-        name: 'Fazendas',
-        params: { id: this.$route.params.producer_id }
-      })
     },
 
     statusLabel(status) {
@@ -83,6 +76,11 @@ export default {
     formatValue(value, fallback = 'Não informado') {
       if (value === null || value === undefined || value === '') return fallback
       return value
+    },
+
+    goTo(lot_id){
+      localStorage.setItem('lot', lot_id)
+      this.$router.push({name: 'Animais do Lote'})
     }
   }
 }
@@ -105,14 +103,6 @@ export default {
           </v-col>
 
           <v-col cols="12" md="4" class="d-flex gap-2 justify-start justify-md-end">
-            <v-btn
-              variant="outlined"
-              prepend-icon="mdi-arrow-left"
-              @click="goBack"
-            >
-              Voltar
-            </v-btn>
-
             <v-btn
               color="primary"
               prepend-icon="mdi-plus"
@@ -258,7 +248,8 @@ export default {
                 color="primary" 
                 variant="flat" 
                 prepend-icon="mdi-cow"
-                text="Rebanho"/>
+                text="Rebanho"
+                @click="goTo(lot.id)"/>
               <v-btn 
                 color="secondary" 
                 variant="text"

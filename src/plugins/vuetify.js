@@ -60,15 +60,8 @@ export default createVuetify({
         success: '#16A34A',
         warning: '#D97706',
         error: '#DC2626',
-        background: '#F8FAFC',
-        surface: '#FFFFFF',
-        'surface-variant': '#F1F5F9',
-        'on-primary': '#FFFFFF',
-        'on-secondary': '#FFFFFF',
-        'on-background': '#0F172A',
-        'on-surface': '#1E293B',
       },
-    },
+    },  
 
     dark: {
       dark: true,

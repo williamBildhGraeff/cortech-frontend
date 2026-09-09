@@ -47,7 +47,8 @@ export default {
     },
 
     selectProducer(producer){
-      this.$router.push({ name: 'Fazendas', params: { id: producer.id } })
+      localStorage.setItem('producer', producer.id)
+      this.$router.push('/fazendas')
     }
   }
 }

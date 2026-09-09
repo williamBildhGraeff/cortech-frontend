@@ -61,6 +61,11 @@ export default {
     return normalizedValue !== '' || 'Este campo é obrigatório'
   },
 
+  peso: peso => {
+    return Number(peso) > 0 ||
+					'O peso deve ser maior que zero'
+  },
+
   nome: value => {
     const normalizedValue = String(value || '').trim()
     return normalizedValue.length >= 2 || 'Informe ao menos 2 caracteres'

@@ -18,7 +18,8 @@ export default {
   methods: {
     async getFarms(){
       try {
-        const res = await farms.getFarmsByProducerId(this.$route.params.id)
+        const producer_id = localStorage.getItem('producer')
+        const res = await farms.getFarmsByProducerId(producer_id)
         this.farms = res.data
       } catch (error) {
         console.error(error)
@@ -47,14 +48,8 @@ export default {
     },
 
     selectFarm(farm){
-      console.log(farm)
-      this.$router.push({
-        name: 'Lotes',
-        params: { 
-          producer_id: this.$route.params.id,
-          farm_id: farm.id
-        },
-      })
+      localStorage.setItem('farm', farm.id)
+      this.$router.push('/lotes')
     },
 
     formatDate(value){
