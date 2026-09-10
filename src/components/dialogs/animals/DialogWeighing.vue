@@ -35,6 +35,11 @@ export default {
 			type: Object,
 			default: null,
 		},
+
+		novaPesagem: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	emits: [

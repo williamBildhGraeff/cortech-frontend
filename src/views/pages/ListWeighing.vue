@@ -15,7 +15,9 @@ export default {
         ],
         showMenu: false,
         dialogWeighing: false,
+        dialogRegisterWeighing: false, 
         animal: {},
+        pesagem: {},
         dialogDelete: false,
         weightingToDelete: {}
     }),
@@ -55,6 +57,11 @@ export default {
 			}
 		},
 
+        openDialogRegister(item = {}){
+            this.pesagem = item
+            this.dialogRegisterWeighing = true
+        },
+
         openDialogWeighing(item){
             this.animal = {
                 ...item,
@@ -78,7 +85,8 @@ export default {
                     color="primary"
                     variant="flat"
                     text="Adicionar Pesagem"
-                    prepend-icon="mdi-weight-kilogram"/>
+                    prepend-icon="mdi-weight-kilogram"
+                    @click="openDialogRegister"/>
             </v-col>
             <v-col cols="12">
                 <v-card>
@@ -104,8 +112,8 @@ export default {
                     </template>
                      <template #[`item.gmd_calculado_automatico`]="{item}">
                         <v-chip
-                        prepend-icon="mdi-speedometer"
-                        color="warning"
+                        :prepend-icon="`${item.gmd_calculado_automatico ? 'mdi-speedometer' : 'mdi-close'}`"
+                        :color="`${item.gmd_calculado_automatico ? 'warning' : 'red'}`"
                         :text="`${item.gmd_calculado_automatico ? item.gmd_calculado_automatico + ' kg/dia' : 'indisponível'}`"
                         />
                     </template>
@@ -134,6 +142,14 @@ export default {
                                         title="Visualizar pesagens do animal"
                                         @click="openDialogWeighing(item)"
                                     />
+                                    
+                                    <v-divider />
+
+                                    <v-list-item
+                                        prepend-icon="mdi-pen"
+                                        title="Editar"
+                                        @click="openDialogRegister(item)"
+                                    />
 
                                     <v-divider />
 
@@ -150,9 +166,12 @@ export default {
             </v-col>
         </v-row>
     </v-container>
-    
+    <dialog-register-weighing 
+        v-model="dialogRegisterWeighing" 
+        @listar="getWeighing"
+        :pesagem-edit="pesagem"/>
     <dialog-weighing v-model="dialogWeighing" :animal/>
-    	<dialog-delete
+    <dialog-delete
 		v-model="dialogDelete"
 		title="Confirmar exclusão"
 		message="Deseja realmente excluir este item?"
