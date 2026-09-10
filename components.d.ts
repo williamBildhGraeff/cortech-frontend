@@ -11,7 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    copy: typeof import('./src/components/selects/SelectCategory copy.vue')['default']
+    copy: typeof import('./src/components/selects/SelectAge copy.vue')['default']
     Core: typeof import('./src/components/core/Core.vue')['default']
     DialogChoiceCompany: typeof import('./src/components/dialogs/companies/DialogChoiceCompany.vue')['default']
     DialogDelete: typeof import('./src/components/dialogs/DialogDelete.vue')['default']
@@ -19,11 +19,13 @@ declare module 'vue' {
     DialogRegisterAnimal: typeof import('./src/components/dialogs/animals/DialogRegisterAnimal.vue')['default']
     DialogRegisterFarm: typeof import('./src/components/dialogs/farms/DialogRegisterFarm.vue')['default']
     DialogRegisterProducer: typeof import('./src/components/dialogs/producers/DialogRegisterProducer.vue')['default']
+    DialogRegisterWeighing: typeof import('./src/components/dialogs/weighings/DialogRegisterWeighing.vue')['default']
     DialogWeighing: typeof import('./src/components/dialogs/animals/DialogWeighing.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('./src/components/selects/Select.vue')['default']
     SelectAge: typeof import('./src/components/selects/SelectAge.vue')['default']
+    SelectAnimal: typeof import('./src/components/selects/SelectAnimal.vue')['default']
     SelectCategory: typeof import('./src/components/selects/SelectCategory.vue')['default']
     SelectGender: typeof import('./src/components/selects/SelectGender.vue')['default']
     SelectOrigin: typeof import('./src/components/selects/SelectOrigin.vue')['default']

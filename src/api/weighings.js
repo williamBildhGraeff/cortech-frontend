@@ -10,7 +10,7 @@ export default {
     },
 
     createWeighing(data) {
-        return api.post(`/pesagens`, data);
+        return api.post(`${data.animal}/pesagens`, data);
     },
 
     updateWeighing(pesagem_id, data) {
