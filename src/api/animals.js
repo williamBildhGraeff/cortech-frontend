@@ -17,5 +17,9 @@ export default {
 
     async updateAnimal(animalId, animalData) {
         return await api.put(`/animais/${animalId}/`, animalData)
+    },
+
+    async deleteAnimal(animalId) {
+        return await api.delete(`/animais/${animalId}/`)
     }
 }

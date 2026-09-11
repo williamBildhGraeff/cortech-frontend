@@ -11,10 +11,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    copy: typeof import('./src/components/selects/SelectAge copy.vue')['default']
+    copy: typeof import('./src/components/dialogs/DialogConfirm.vue/index.js')['default']
     Core: typeof import('./src/components/core/Core.vue')['default']
     DialogChoiceCompany: typeof import('./src/components/dialogs/companies/DialogChoiceCompany.vue')['default']
+    DialogConfirm: typeof import('./src/components/dialogs/DialogConfirm.vue')['default']
     DialogDelete: typeof import('./src/components/dialogs/DialogDelete.vue')['default']
+    DialogImportFiles: typeof import('./src/components/dialogs/DialogImportFiles.vue')['default']
     DialogLots: typeof import('./src/components/dialogs/lots/DialogLots.vue')['default']
     DialogRegisterAnimal: typeof import('./src/components/dialogs/animals/DialogRegisterAnimal.vue')['default']
     DialogRegisterFarm: typeof import('./src/components/dialogs/farms/DialogRegisterFarm.vue')['default']
@@ -33,6 +35,8 @@ declare module 'vue' {
     SelectStatusLots: typeof import('./src/components/selects/SelectStatusLots.vue')['default']
     Toasts: typeof import('./src/components/toasts/Toasts.vue')['default']
     VBtntext: typeof import('vuetify/lib')['VBtntext']
+    VDilaog: typeof import('vuetify/lib')['VDilaog']
+    VSpace: typeof import('vuetify/lib')['VSpace']
     VSw: typeof import('vuetify/lib')['VSw']
   }
 }
