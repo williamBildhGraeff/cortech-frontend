@@ -19,7 +19,11 @@ export default {
         animal: {},
         pesagem: {},
         dialogDelete: false,
-        weightingToDelete: {}
+        dialogImport: false,
+        weightingToDelete: {},
+        file: null,
+        loading: false,
+        dialogConfirmImport: false
     }),
 
     computed:{
@@ -38,6 +42,56 @@ export default {
                 console.error(error)
                 this.$toast.error(this.$errorApi(error))
             }
+        },
+
+        async exportWeighing(){
+            try {
+                this.loading = true
+                const lote_id = localStorage.getItem('lot')
+                const response = await weighings.exportWeighing({lote_id:lote_id})
+                 const blob = new Blob(
+                    [response.data],
+                    { type: 'text/csv;charset=utf-8;' }
+                )
+                const url = window.URL.createObjectURL(blob)
+
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', `pesagens-lote-${lote_id}.csv`)
+
+                document.body.appendChild(link)
+                link.click()
+
+                link.remove()
+                window.URL.revokeObjectURL(url)
+                this.$toast.success('Sucesso ao exportar as pesagens desse lote!')
+            } catch (error) {
+                console.error(error)
+                this.$toast.error(this.$errorApi(error))
+            } finally {
+                this.loading = false
+            }
+        },
+
+        async importWeighing(){
+            try {
+                this.loading = true
+                const formData = new FormData()
+                formData.append('file', this.file)
+                await weighings.importWeighing(formData)
+                this.$toast.success('Sucesso ao importar as pesagens!')
+                this.getWeighing()
+                this.file = null
+            } catch (error) {
+                console.error(error)
+                this.$toast.error(this.$errorApi(error))
+            } finally {
+                this.loading = false
+            }
+        },
+
+        confirmImport(){
+            this.importWeighing()
         },
 
         deleteWeighting(item){
@@ -80,7 +134,21 @@ export default {
 <template>
     <v-container fluid>
         <v-row>
-            <v-col cols="12" class="text-end">
+            <v-spacer/>
+            <v-col cols="12" md="6" class="text-end justify-space-between d-flex">
+                 <v-btn
+                    color="success"
+                    variant="flat"
+                    :loading
+                    text="Exportar Pesagem"
+                    prepend-icon="mdi-file-export-outline"
+                    @click="exportWeighing"/>
+                 <v-btn
+                    color="red"
+                    variant="flat"
+                    text="Importar Pesagem"
+                    prepend-icon="mdi-file-import-outline"
+                    @click="dialogImport = true"/>
                 <v-btn
                     color="primary"
                     variant="flat"
@@ -94,13 +162,14 @@ export default {
                     :items="pesagens"
                     :height="heigthTable"
                     density="compact"
+                    :loading
                     :headers>
                      <template #[`item.origem`]="{item}">
                         <v-chip
                             color="primary"
                             variant="tonal"
                             class="text-capitalize"
-                            :text="item.origem"
+                            :text="item.origem == 'importacao' ? 'Importação' : item.origem"
                         />
                     </template>
                     <template #[`item.data`]="{item}">
@@ -171,6 +240,10 @@ export default {
         @listar="getWeighing"
         :pesagem-edit="pesagem"/>
     <dialog-weighing v-model="dialogWeighing" :animal/>
+    <dialog-import-files 
+        v-model="dialogImport" 
+        v-model:file-to-upload="file" 
+        :import="confirmImport"/>
     <dialog-delete
 		v-model="dialogDelete"
 		title="Confirmar exclusão"
@@ -178,5 +251,13 @@ export default {
 		confirm-text="Excluir"
 		cancel-text="Cancelar"
 		@confirm="deletarPesagem"
+	/>
+    <dialog-delete
+		v-model="dialogConfirmImport"
+		title="Confirmar"
+		message="Você garante que esse arquivo possui os dadossomente deste lote? Caso os animais pertencerem a outro lote haverá inconsistencia nos dados!"
+		confirm-text="Confirmar"
+		cancel-text="Cancelar"
+		@confirm="importWeighing"
 	/>
 </template>

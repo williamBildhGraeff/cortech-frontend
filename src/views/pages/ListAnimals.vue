@@ -17,7 +17,8 @@ export default {
             { title: 'Idade', key: 'idade' },
             { title: 'Status', key: 'status' },
             { title: 'Ações', key: 'actions', align: 'center' },
-        ]
+        ],
+        dialogDelete: false
     }),
 
     computed: {
@@ -44,6 +45,18 @@ export default {
                 this.$toast.error(this.$errorApi(error))
             }
         },
+        
+        async deleteAnimal(item){
+            try {
+                await animals.deleteAnimal(item.id)
+                this.getAnimals()
+                this.$toast.success('Animal deletado com sucesso!')
+                this.dialogDelete = false
+            } catch (error) {
+                console.error(error)
+                this.$toast.error(this.$errorApi(error))
+            }
+        },
 
         openDialogWeighing(animal){
             this.animal = animal
@@ -53,6 +66,11 @@ export default {
         openDialog(item = {}){
             this.animal = item
             this.dialogRegister = true
+        },
+        
+        openDialogDelete(item){
+            this.animal = item
+            this.dialogDelete = true
         }
     },
 
@@ -109,7 +127,6 @@ export default {
                         <template #[`item.actions`]="{item}">
                            <v-btn 
                                 v-tooltip="'Editar animal'"
-                                class="me-2"
                                 icon="mdi-pen"
                                 rounded=""
                                 size="x-small"
@@ -118,12 +135,21 @@ export default {
                                 @click="openDialog(item)"/>
                             <v-btn 
                                 v-tooltip="'Pesagens do animal'"
+                                class="ma-2"
                                 icon="mdi-weight-kilogram"
                                 rounded=""
                                 size="x-small" 
                                 variant="tonal"
                                 color="primary"
                                 @click="openDialogWeighing(item)"/>
+                            <v-btn 
+                                v-tooltip="'Deletar animal'"
+                                icon="mdi-delete"
+                                rounded=""
+                                size="x-small" 
+                                variant="tonal"
+                                color="red"
+                                @click="deleteAnimal(item)"/>
 
                         </template>
                     </v-data-table>
@@ -133,4 +159,12 @@ export default {
     </v-container>
     <dialog-weighing v-model="dialogWeighing" :animal/>
     <dialog-register-animal v-model="dialogRegister" :animal @list="getAnimals" />
+    <dialog-delete
+		v-model="dialogDelete"
+		title="Confirmar exclusão"
+		message="Deseja realmente excluir este animal? Todas as pesagens deste animal serão deletadas juntamente!"
+		confirm-text="Excluir"
+		cancel-text="Cancelar"
+		@confirm="deleteAnimal"
+	/>
 </template>

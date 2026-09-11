@@ -21,4 +21,19 @@ export default {
         return api.delete(`/pesagens/${pesagem_id}`);
     },
 
+    exportWeighing(params) {
+        return api.get(`/exportar-pesagens/`, {params, responseType: 'blob'});
+    },
+
+    importWeighing(file) {
+        const lote_id = localStorage.getItem('lot');
+        return api.post(`lotes/${lote_id}/importar-pesagens`, file,
+            { headers: 
+                {
+                    'Content-Type': 'multipart/form-data',
+                }
+            },
+        );
+    },
+
 }
