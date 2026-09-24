@@ -46,7 +46,7 @@ export default {
         </v-list>
       </v-navigation-drawer>
 
-      <v-main style="height: 500px;">
+      <v-main>
         <router-view/>
       </v-main>
     </v-layout>
