@@ -37,7 +37,7 @@ export default {
             try {
                 const lote_id = localStorage.getItem('lot')
                 const response = await weighings.getWeighingByLotId(lote_id)
-                this.pesagens = response.data
+                this.pesagens = response.data.pesagens
             } catch (error) {
                 console.error(error)
                 this.$toast.error(this.$errorApi(error))

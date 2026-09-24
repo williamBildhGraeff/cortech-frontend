@@ -12,6 +12,7 @@ import ListLots from '../views/pages/ListLots.vue'
 import ListAnimals from '../views/pages/ListAnimals.vue'
 import Core from '../components/core/Core.vue'
 import ListWeighing from '../views/pages/ListWeighing.vue'
+import Dashboard from '../views/pages/Dashboard.vue'
 const routes = [
   {
     path: '/login',
@@ -39,6 +40,11 @@ const routes = [
     redirect: '/animais',
     component: Core,
     children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: Dashboard,
+      },
       {
         path: 'animais',
         name: 'Animais do Lote',
